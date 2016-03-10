@@ -6,12 +6,16 @@ Signit
 **Signit** is a helper-library to create and verify HMAC (HMAC-SHA256 by
 default) signatures that could be used to sign requests to the APIs.
 
--  As a client you could sign your requests using
-   ``signit.create_signature()``
--  As a server you could verify a signature from request using
-   ``signit.verify_signature()``
--  As a server you could also generate access and secret keys for your
-   client using ``signit.generate_key()``
+On the **client** side you could
+
+* sign your requests using ``signit.create_signature()``
+
+On the **server** side you could
+
+* parse a signature retrieved from request header or query string using
+  ``signit.parse_signature()``
+* verify retrieved signature using ``signit.verify_signature()``
+* generate access and secret keys for client using ``signit.generate_key()``
 
 --------------
 
