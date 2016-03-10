@@ -1,0 +1,15 @@
+*.py[cod]
+__pycache__
+pip-log.txt
+*~
+htmlcov
+.coverage
+env
+.env
+venv
+.venv
+dist
+build
+*.egg-info
+.eggs
+.cache
