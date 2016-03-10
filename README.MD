@@ -1,6 +1,6 @@
 # Signit
 
-**Signit** is a library to create and verify HMAC (HMAC-SHA256 by default) signatures that could be used to sign requests to the APIs.
+**Signit** is a helper-library to create and verify HMAC (HMAC-SHA256 by default) signatures that could be used to sign requests to the APIs.
 
 - As a client you could sign your requests using `signit.create_signature()`
 - As a server you could verify a signature from request using `signit.verify_signature()`
