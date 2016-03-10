@@ -1,5 +1,5 @@
 # Signit
----
+
 [![Build Status](https://travis-ci.org/f0t0n/signit.svg?branch=master)](https://travis-ci.org/f0t0n/signit)
 [![Coverage Status](https://coveralls.io/repos/github/f0t0n/signit/badge.svg?branch=master)](https://coveralls.io/github/f0t0n/signit?branch=master)
 
