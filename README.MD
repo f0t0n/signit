@@ -1,4 +1,7 @@
 # Signit
+---
+[![Build Status](https://travis-ci.org/f0t0n/signit.svg?branch=master)](https://travis-ci.org/f0t0n/signit)
+[![Coverage Status](https://coveralls.io/repos/github/f0t0n/signit/badge.svg?branch=master)](https://coveralls.io/github/f0t0n/signit?branch=master)
 
 **Signit** is a helper-library to create and verify HMAC (HMAC-SHA256 by default) signatures that could be used to sign requests to the APIs.
 
