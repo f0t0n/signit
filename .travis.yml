@@ -8,6 +8,8 @@ python:
   - "nightly" # currently points to 3.6-dev
 
 # command to install dependencies
-install: "python setup.py -q install"
+install:
+    - pip install -q pytest==2.9.0
+    - pip install -q .
 # command to run tests
 script: "python setup.py test"
