@@ -33,7 +33,7 @@ with codecs.open(abs_path(name, '__init__.py'), 'r', 'utf-8') as fp:
     except IndexError:
         raise RuntimeError('Unable to determine version.')
 
-author = 'Eugene `f0t0n` Naydenov'
+author = 'Eugene Naydenov'
 author_email = 't.34.oxygen+github+{}@gmail.com'.format(name)
 
 maintainer = author
@@ -43,7 +43,7 @@ setup(
     name=name,
     version=version,
     description=('HMAC signature library for http requests signing'),
-    long_description=read('README.MD'),
+    long_description=read('README.rst'),
     author=author,
     author_email=author_email,
     maintainer=maintainer,
