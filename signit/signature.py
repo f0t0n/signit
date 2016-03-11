@@ -30,8 +30,10 @@ def create_signature(access_key, secret_key, message, algorithm=sha256,
     return signature.strip()  # in case if `auth_header_prefix` is empty string
 
 
-def verify_signature(access_key, secret_key, message, signature):
+def verify_signature(access_key, secret_key, message, signature,
+                     auth_header_prefix=AUTH_PREFIX_HEADER):
     return hmac.compare_digest(
         signature,
-        create_signature(access_key, secret_key, message)
+        create_signature(access_key, secret_key, message,
+                         auth_header_prefix=auth_header_prefix)
     )
