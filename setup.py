@@ -16,8 +16,8 @@ def read(f):
 
 
 name = 'signit'
+
 install_requires = [
-    'pytest-runner==2.7',
 ]
 
 tests_require = [
@@ -69,5 +69,4 @@ setup(
     install_requires=install_requires,
     tests_require=tests_require,
     include_package_data=True,
-    #cmdclass=dict(test=PyTest),
 )
