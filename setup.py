@@ -21,6 +21,7 @@ install_requires = [
 ]
 
 tests_require = [
+    'pytest-runner==2.7',
     'pytest==2.9.0',
     'pytest-cov==2.2.1',
 ]
