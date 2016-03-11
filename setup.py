@@ -17,11 +17,15 @@ def read(f):
 
 name = 'signit'
 
+
 install_requires = [
 ]
 
-tests_require = [
+setup_requires = [
     'pytest-runner==2.7',
+]
+
+tests_require = [
     'pytest==2.9.0',
     'pytest-cov==2.2.1',
 ]
@@ -68,6 +72,7 @@ setup(
     license='Apache 2',
     packages=[name, ],
     install_requires=install_requires,
+    setup_requires=setup_requires,
     tests_require=tests_require,
     include_package_data=True,
 )
