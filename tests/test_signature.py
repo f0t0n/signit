@@ -1,8 +1,5 @@
 import pytest
-from signit import create_signature
-from signit import parse_signature
-from signit import verify_signature
-from signit import generate_key
+import signit
 
 
 @pytest.fixture(scope='module')
@@ -35,40 +32,25 @@ def _full_signature(_prefix, _access_key, _signature):
     return '{} {}:{}'.format(_prefix, _access_key, _signature)
 
 
-@pytest.fixture(scope='module')
-def _key_settings():
-    return {
-        'key_length': 5,
-        'key_chars': 'abc123',
-    }
-
-
-def test_generate_key(_key_settings):
-    key = generate_key(**_key_settings)
-    assert (len(key) == _key_settings['key_length'],
-            'Key should have defined length')
-    assert (not set(key) - set(_key_settings['key_chars']),
-            'Key should contain only defined chars')
-
-
-def test_create_signature(_access_key, _secret_key, _message, _full_signature):
+def test_create(_access_key, _secret_key, _message, _full_signature):
     expected_result = _full_signature
-    actual_result = create_signature(_access_key, _secret_key, _message)
+    actual_result = signit.signature.create(_access_key, _secret_key, _message)
     assert actual_result == expected_result, 'Should produce correct signature'
 
 
-def test_parse_signature(_access_key, _signature, _full_signature):
-    access_key, signature = parse_signature(_full_signature)
+def test_parse(_access_key, _signature, _full_signature):
+    access_key, signature = signit.signature.parse(_full_signature)
     assert (
         (access_key, signature) == (_access_key, _signature),
         'Should parse access key and signature correctly'
     )
     with pytest.raises(ValueError) as e:
-        parse_signature(_full_signature, auth_header_prefix='WRONG_PREFIX')
+        signit.signature.parse(_full_signature,
+                               auth_header_prefix='WRONG_PREFIX')
     assert 'Invalid prefix value in `Authorization` header.' in str(e.value)
 
 
-def test_verify_signature(_access_key, _secret_key, _message, _full_signature):
+def test_verify(_access_key, _secret_key, _message, _full_signature):
     valid = (_access_key, _secret_key, _message, _full_signature)
     len_valid = len(valid)
 
@@ -80,7 +62,7 @@ def test_verify_signature(_access_key, _secret_key, _message, _full_signature):
 
     invalid = (_invalid(i) for i in range(len_valid - 1))
 
-    assert verify_signature(*valid)
+    assert signit.signature.verify(*valid)
 
     for args in invalid:
-        assert not verify_signature(*args)
+        assert not signit.signature.verify(*args)

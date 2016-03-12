@@ -8,14 +8,14 @@ default) signatures that could be used to sign requests to the APIs.
 
 On the **client** side you could
 
-* sign your requests using ``signit.create_signature()``
+* sign your requests using ``signit.signature.create()``
 
 On the **server** side you could
 
 * parse a signature retrieved from request header or query string using
-  ``signit.parse_signature()``
-* verify retrieved signature using ``signit.verify_signature()``
-* generate access and secret keys for client using ``signit.generate_key()``
+  ``signit.signature.parse()``
+* verify retrieved signature using ``signit.signature.verify()``
+* generate access and secret keys for client using ``signit.key.generate()``
 
 --------------
 
@@ -33,7 +33,7 @@ Example of usage (Py3k):
 
     def create_user(user: dict) -> bool:
         msg = str(datetime.datetime.utcnow().timestamp())
-        auth = signit.create_signature(MY_ACCESS_KEY, MY_SECRET_KEY, msg)
+        auth = signit.signature.create(MY_ACCESS_KEY, MY_SECRET_KEY, msg)
         headers = {
             'Unix-Timestamp': msg,
             'Authorization': auth,
@@ -65,9 +65,9 @@ this way:
 
     async def post(request):
         message = request.headers['Unix-Timestamp']
-        access_key, signature = signit.parse_signature(request.headers['Authorization'])
+        access_key, signature = signit.signature.parse(request.headers['Authorization'])
         secret_key = await get_secret_key_from_db(access_key)
-        if not signit.verify_signature(access_key, secret_key, message, signature):
+        if not signit.signature.verify(access_key, secret_key, message, signature):
             raise web.HTTPUnauthorized('Invalid signature')
         try:
             await create_user(request)
