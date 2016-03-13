@@ -177,7 +177,8 @@ from psycopg2 import IntegrityError
 
 async def post(request):
     message = request.headers['Unix-Timestamp']
-    access_key, signature = signit.signature.parse(request.headers['Authorization'])
+    signature = request.headers['Authorization']
+    access_key, hmac_digest = signit.signature.parse(signature)
     secret_key = await get_secret_key_from_db(access_key)
     if not signit.signature.verify(access_key, secret_key, message, signature):
         raise web.HTTPUnauthorized('Invalid signature')
@@ -235,5 +236,5 @@ async def post(request):
 
 <!--
 MkDocs version : 0.15.3
-Build Date UTC : 2016-03-13 01:37:35.705822
+Build Date UTC : 2016-03-13 17:48:57.138924
 -->
