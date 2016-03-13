@@ -3,6 +3,7 @@ __pycache__
 pip-log.txt
 *~
 htmlcov
+site
 .coverage
 env
 .env
