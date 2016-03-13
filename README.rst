@@ -67,7 +67,8 @@ this way:
 
     async def post(request):
         message = request.headers['Unix-Timestamp']
-        access_key, signature = signit.signature.parse(request.headers['Authorization'])
+        signature = request.headers['Authorization']
+        access_key, hmac_digest = signit.signature.parse(signature)
         secret_key = await get_secret_key_from_db(access_key)
         if not signit.signature.verify(access_key, secret_key, message, signature):
             raise web.HTTPUnauthorized('Invalid signature')
