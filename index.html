@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A helper-library to create and verify HMAC (HMAC-SHA256 by default) signatures that could be used to sign requests to the APIs.">
+        <meta name="author" content="Eugene Naydenov">
+        
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+	<title>SignIt</title>
+
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="./css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body class="homepage">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">SignIt</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="active">
+                        <a href=".">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="key/">Key</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="signature/">Signature</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li class="disabled">
+                        <a rel="next" >
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="key/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/f0t0n/signit">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#signit">SignIt</a></li>
+        
+            <li><a href="#about">About</a></li>
+        
+            <li><a href="#use-cases">Use cases</a></li>
+        
+            <li><a href="#example-of-usage-client">Example of usage (client)</a></li>
+        
+            <li><a href="#example-of-usage-server">Example of usage (server)</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="signit">SignIt<a class="headerlink" href="#signit" title="Permanent link">&para;</a></h1>
+<hr />
+<h4 id="about">About<a class="headerlink" href="#about" title="Permanent link">&para;</a></h4>
+<p><strong>SignIt</strong> is a helper-library to create and verify HMAC (HMAC-SHA256 by default) signatures that could be used to sign requests to the APIs.</p>
+<hr />
+<h4 id="use-cases">Use cases<a class="headerlink" href="#use-cases" title="Permanent link">&para;</a></h4>
+<p>On the <strong>client</strong> side you could</p>
+<ul>
+<li>sign your requests using <code>signit.signature.create()</code></li>
+</ul>
+<p>On the <strong>server</strong> side you could </p>
+<ul>
+<li>parse a signature retrieved from request header or query string using <code>signit.signature.parse()</code></li>
+<li>verify retrieved signature using <code>signit.signature.verify()</code></li>
+<li>generate access and secret keys for client using <code>signit.key.generate()</code></li>
+</ul>
+<hr />
+<h4 id="example-of-usage-client">Example of usage (client)<a class="headerlink" href="#example-of-usage-client" title="Permanent link">&para;</a></h4>
+<pre><code class="py">import datetime
+import requests
+import signit
+
+ACCESS_KEY = 'MY_ACCESS_KEY'
+SECRET_KEY = 'MY_SECRET_KEY'
+
+def create_user(user: dict) -&gt; bool:
+    msg = str(datetime.datetime.utcnow().timestamp())
+    auth = signit.signature.create(MY_ACCESS_KEY, MY_SECRET_KEY, msg)
+    headers = {
+        'Unix-Timestamp': msg,
+        'Authorization': auth,
+    }
+    r = requests.post('http://example.com/users', json=user, headers=headers)
+    return r.status_code == 201
+</code></pre>
+
+<p>The Authorization header will look like</p>
+<pre><code class="http">Authorization: HMAC-SHA256 MY_ACCESS_KEY:0947c88ce16d078dde4a2aded1fe4627643a378757dccc3428c19569fea99542
+</code></pre>
+
+<hr />
+<h4 id="example-of-usage-server">Example of usage (server)<a class="headerlink" href="#example-of-usage-server" title="Permanent link">&para;</a></h4>
+<p>The server has issued an access key and a secret key for you. And only you and the server know the secret key.</p>
+<p>So that the server could identify you by your public access key and ensure that you used the secret key to produce a hash of the message in this way:</p>
+<pre><code class="python"># ...somewhere in my_api/resources/user.py
+import signit
+from aiohttp import web
+from psycopg2 import IntegrityError
+
+async def post(request):
+    message = request.headers['Unix-Timestamp']
+    access_key, signature = signit.signature.parse(request.headers['Authorization'])
+    secret_key = await get_secret_key_from_db(access_key)
+    if not signit.signature.verify(access_key, secret_key, message, signature):
+        raise web.HTTPUnauthorized('Invalid signature')
+    try:
+        await create_user(request)
+    except IntegrityError:
+        raise web.HTTPConflict()
+    return web.HTTPCreated()
+</code></pre>
+
+<p>Additionally if you use a <code>Unix-Timestamp</code> as a message message the server could check if the request is too old and deny with <code>401</code> to protect against "replay attacks".</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
+        <script>var base_url = '.';</script>
+        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
+        <script src="./js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 0.15.3
+Build Date UTC : 2016-03-13 01:23:06.705713
+-->
