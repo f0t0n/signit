@@ -6,7 +6,7 @@ Signit
 **Signit** is a helper-library to create and verify HMAC (HMAC-SHA256 by
 default) signatures that could be used to sign requests to the APIs.
 
-**`Documentation <http://f0t0n.github.io/signit>`__**
+`Documentation <http://f0t0n.github.io/signit>`__
 
 On the **client** side you could
 
