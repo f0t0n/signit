@@ -1,0 +1,14 @@
+site_name: SignIt
+site_description: A helper-library to create and verify HMAC (HMAC-SHA256 by default) signatures that could be used to sign requests to the APIs.
+site_author: Eugene Naydenov
+
+pages:
+    - 'Home': 'index.md'
+    - 'Key': 'key.md'
+    - 'Signature': 'signature.md'
+
+repo_url: https://github.com/f0t0n/signit
+
+markdown_extensions:
+    - toc:
+        permalink: True

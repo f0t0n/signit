@@ -2,7 +2,6 @@ import codecs
 import os
 import re
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
 
 
 def abs_path(*relative_path_parts):
@@ -20,6 +19,7 @@ name = 'signit'
 
 install_requires = [
 ]
+
 
 setup_requires = [
     'pytest-runner==2.7',
