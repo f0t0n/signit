@@ -137,36 +137,35 @@
 <li><strong>access_key</strong> (<em>str</em>) - A public access key that allows to identify the client</li>
 <li><strong>secret_key</strong> (<em>str</em>) - A private secret key to hash the message with</li>
 <li><strong>message</strong> (<em>str</em>) - A message to hash</li>
-<li><strong>algorithm</strong> - Is the digest name, digest constructor or module for the HMAC object to use (default <code>hashlib.sha256</code>). For more details see <a href="https://docs.python.org/3.5/library/hmac.html#hmac.new"><em><code>hmac.new</code></em></a></li>
+<li><strong>algorithm</strong> - Is the digest name, digest constructor or module for the HMAC object to use (default <code>hashlib.sha256</code>). For more details see <a href="https://docs.python.org/3.5/library/hmac.html#hmac.new"><em><code>hmac.new</code></em></a>. Used to create a HMAC.</li>
+<li><strong>auth_header_prefix</strong> (<em>str</em>) - A prefix for <code>Authorization</code> header (default <code>'HMAC-SHA256'</code>).</li>
 </ul>
-<p><strong>Returns</strong> (<em>str</em>) - a generated signature in format of <code>'&lt;prefix&gt; &lt;access key&gt;:&lt;hmac signature&gt;'</code></p>
+<p><strong>Returns</strong> (<em>str</em>) - a generated signature in format of <code>'&lt;auth_header_prefix&gt; &lt;access_key&gt;:&lt;hmac_hex_digest&gt;'</code></p>
 <hr />
 <blockquote>
-<p><strong><code>signit.signature.parse(signature, auth_header_prefix=None)</code></strong></p>
+<p><strong><code>signit.signature.parse(signature)</code></strong></p>
 </blockquote>
 <p>Parses a signature created before with <code>signit.signature.create</code>.</p>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong>signature</strong> (<em>str</em>) - a signature to parse</li>
-<li><strong>auth_header_prefix</strong> (<em>str</em>) - a header prefix you expect signature to have. If set, the <code>ValueError</code> will be raised if the <code>signature</code> has different prefix.</li>
+<li><strong>signature</strong> (<em>str</em>) - a signature to parse (the value from <code>Authorization</code> header).</li>
 </ul>
-<p><strong>Returns</strong> (<em>tuple</em>) - <code>(&lt;access_key&gt;, &lt;hmac_signature&gt;)</code> tuple</p>
+<p><strong>Returns</strong> (<em>list</em>) - Signagure's parts in form of <code>[&lt;auth_header_prefix&gt;, &lt;access_key&gt;, &lt;hmac_hex_digest&gt;]</code>.</p>
 <hr />
 <blockquote>
-<p><strong><code>signit.signature.verify(access_key, secret_key, message, signature,
-           auth_header_prefix=AUTH_PREFIX_HEADER)</code></strong></p>
+<p><strong><code>signit.signature.verify(hmac_hex_digest, secret_key, message, algorithm=sha256)</code></strong></p>
 </blockquote>
-<p>Verifies the signature (e.g. provided by API client) against known <code>access_key</code>, <code>secret_key</code> and <code>message</code>. </p>
-<p>In other words it allows the server side to make sure the <code>message</code> has been hashed with an appropriate <code>secret_key</code> that belongs to the client identified by its <code>access_key</code>.</p>
+<p>Verifies the signature (e.g. provided by API client) against known <code>secret_key</code> and <code>message</code>. </p>
+<p>In other words it allows the server side to make sure the <code>message</code> has been hashed with an appropriate <code>secret_key</code>.</p>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong>access_key</strong> (<em>str</em>) - A public access key that allows to identify the client</li>
-<li><strong>secret_key</strong> (<em>str</em>) - A private secret key to hash the message with</li>
-<li><strong>message</strong> (<em>str</em>) - A message to hash</li>
-<li><strong>signature</strong> (<em>str</em>) - A signature provided by client in format of <code>'&lt;prefix&gt; &lt;access key&gt;:&lt;hmac signature&gt;'</code></li>
-<li><strong>auth_header_prefix</strong> - a header prefix you're expect to see in provided <code>signature</code> to reproduce its (signature's) exact copy during the verification.</li>
+<li><strong>hmac_hex_digest</strong> (<em>str</em>) - A message's hash to check.
+Namely it's <code>&lt;hmac_hex_digest&gt;</code> part from the <code>Authorization</code> header's value (<code>'&lt;auth_header_prefix&gt; &lt;access_key&gt;:&lt;hmac_hex_digest&gt;'</code>).</li>
+<li><strong>secret_key</strong> (<em>str</em>) - A private secret key to hash the message with.</li>
+<li><strong>message</strong> (<em>str</em>) - A message to hash.</li>
+<li><strong>algorithm</strong> - Is the digest name, digest constructor or module for the HMAC object to use (default <code>hashlib.sha256</code>). For more details see <a href="https://docs.python.org/3.5/library/hmac.html#hmac.new"><em><code>hmac.new</code></em></a>. Used to create a HMAC.</li>
 </ul>
-<p><strong>Returns</strong> (<em>bool</em>) - is the provided <code>signature</code> valid, namely is successfully verified against known on the server side access, secret key and the message.</p></div>
+<p><strong>Returns</strong> (<em>bool</em>) - is the provided <code>hmac_hex_digest</code> valid, namely is successfully verified against known on the server side secret key and the message.</p></div>
             
         </div>
 
