@@ -65,9 +65,9 @@ from psycopg2 import IntegrityError
 async def post(request):
     message = request.headers['Unix-Timestamp']
     signature = request.headers['Authorization']
-    access_key, hmac_digest = signit.signature.parse(signature)
+    prefix, access_key, hmac_digest = signit.signature.parse(signature)
     secret_key = await get_secret_key_from_db(access_key)
-    if not signit.signature.verify(access_key, secret_key, message, signature):
+    if not signit.signature.verify(hmac_digest, secret_key, message):
         raise web.HTTPUnauthorized('Invalid signature')
     try:
         await create_user(request)

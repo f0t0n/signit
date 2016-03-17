@@ -5,27 +5,29 @@ from ._constants import SIGNATURE_FORMAT
 from ._helpers import _bytes
 
 
-def create(access_key, secret_key, message, algorithm=sha256,
-           auth_header_prefix=AUTH_PREFIX_HEADER):
+def _create_digest(secret_key, message, algorithm=sha256):
     new_hmac = hmac.new(_bytes(secret_key), msg=_bytes(message),
                         digestmod=algorithm)
-    signature = SIGNATURE_FORMAT.format(prefix=auth_header_prefix,
-                                        access_key=access_key,
-                                        signature=new_hmac.hexdigest())
-    return signature.strip()  # in case if `auth_header_prefix` is empty string
+    return new_hmac.hexdigest()
 
 
-def parse(signature, auth_header_prefix=None):
-    prefix, _signature = signature.split(' ', 1)
-    if auth_header_prefix and prefix != auth_header_prefix:
-        raise ValueError('Invalid prefix value in `Authorization` header.')
-    return _signature.split(':')  # access_key, signature
-
-
-def verify(access_key, secret_key, message, signature,
+def create(access_key, secret_key, message, algorithm=sha256,
            auth_header_prefix=AUTH_PREFIX_HEADER):
-    return hmac.compare_digest(
-        signature,
-        create(access_key, secret_key, message,
-               auth_header_prefix=auth_header_prefix)
-    )
+    hmac_hex_digest = _create_digest(secret_key, message, algorithm=algorithm)
+    return SIGNATURE_FORMAT.format(auth_header_prefix=auth_header_prefix,
+                                   access_key=access_key,
+                                   hmac_hex_digest=hmac_hex_digest)
+
+
+def parse(signature):
+    """ Parses the header value
+    and returns a list (<auth_header_prefix>, <access_key>, <hmac_hex_digest>).
+    """
+    prefix, access_key_hmac_digest = signature.split(' ', 1)
+    return [prefix] + access_key_hmac_digest.split(':')
+
+
+def verify(hmac_hex_digest, secret_key, message, algorithm=sha256):
+    valid_hmac_hex_digest = _create_digest(secret_key, message,
+                                           algorithm=algorithm)
+    return hmac.compare_digest(hmac_hex_digest, valid_hmac_hex_digest)
