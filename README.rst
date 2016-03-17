@@ -1,5 +1,7 @@
 SignIt
-------
+======
+
+|Build Status| |Coverage Status| |PyPI version|
 
 About
 ^^^^^
@@ -89,3 +91,10 @@ this way:
 Additionally if you use a ``Unix-Timestamp`` as a message message the
 server could check if the request is too old and deny with ``401`` to
 protect against "replay attacks".
+
+.. |Build Status| image:: https://travis-ci.org/f0t0n/signit.svg?branch=master
+   :target: https://travis-ci.org/f0t0n/signit
+.. |Coverage Status| image:: https://coveralls.io/repos/github/f0t0n/signit/badge.svg?branch=master
+   :target: https://coveralls.io/github/f0t0n/signit?branch=master
+.. |PyPI version| image:: https://badge.fury.io/py/signit.svg
+   :target: https://badge.fury.io/py/signit
