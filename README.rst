@@ -1,6 +1,10 @@
 SignIt
 ======
 
+.. image:: https://badges.gitter.im/f0t0n/signit.svg
+   :alt: Join the chat at https://gitter.im/f0t0n/signit
+   :target: https://gitter.im/f0t0n/signit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
 |Build Status| |Coverage Status| |PyPI version|
 
 About
