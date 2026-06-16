@@ -26,7 +26,7 @@ setup_requires = [
 ]
 
 tests_require = [
-    'pytest==2.9.0',
+    'pytest==9.0.3',
     'pytest-cov==2.2.1',
 ]
 
